@@ -14,8 +14,9 @@ public class TextEditorGUI {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Creating the menu bar
+        //// Creating the menu bar
         JMenuBar menuBar =new JMenuBar();
+
 
         // Creating the file menu
         JMenu fileMenu = new JMenu("Datei");
@@ -27,6 +28,7 @@ public class TextEditorGUI {
         JMenuItem saveItem = new JMenuItem("Speichern");
         fileMenu.add(saveItem);
 
+
         // Creating the edit menu
         JMenu editMenu = new JMenu("Bearbeiten");
         menuBar.add(editMenu);
@@ -37,21 +39,29 @@ public class TextEditorGUI {
         JMenuItem searchItem = new JMenuItem("Suchen");
         editMenu.add(searchItem);
 
-        // Creating the Toolbar
+        // Adding the meu bar to JFrame
+        frame.setJMenuBar(menuBar);
+
+
+        //// Creating the Toolbar
         JToolBar toolBar = new JToolBar();
         JButton newButton = new JButton(new ImageIcon("assets/icons/file-regular.png"));
         newButton.setToolTipText("Neue Datei erstellen");
         toolBar.add(newButton);
 
-        // Adding the meu bar to JFrame
-        frame.setJMenuBar(menuBar);
-
         // Adding the toolbar to JFrame
-        frame.add(toolBar, BorderLayout.NORTH);
+        //frame.add(toolBar, BorderLayout.NORTH);
+
+
+        //// Creating the text area
+        JTextArea textArea = new JTextArea();
+        textArea.setLineWrap(true); // <- Implementing manual switching on and off later.
+
+        // Adding the text area to JFrame
+        frame.add(new JScrollPane(textArea), BorderLayout.CENTER);
+
 
         frame.setVisible(true);
     }
-
-
 
 }
