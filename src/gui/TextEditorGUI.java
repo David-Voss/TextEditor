@@ -37,8 +37,17 @@ public class TextEditorGUI {
         JMenuItem searchItem = new JMenuItem("Suchen");
         editMenu.add(searchItem);
 
+        // Creating the Toolbar
+        JToolBar toolBar = new JToolBar();
+        JButton newButton = new JButton(new ImageIcon("assets/icons/file-regular.png"));
+        newButton.setToolTipText("Neue Datei erstellen");
+        toolBar.add(newButton);
+
         // Adding the meu bar to JFrame
         frame.setJMenuBar(menuBar);
+
+        // Adding the toolbar to JFrame
+        frame.add(toolBar, BorderLayout.NORTH);
 
         frame.setVisible(true);
     }
