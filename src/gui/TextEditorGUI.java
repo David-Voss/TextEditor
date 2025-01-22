@@ -3,44 +3,54 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class TextEditorGUI {
+public class TextEditorGUI extends JFrame {
 
-    JFrame frame;
+    //JFrame frame;
+    JMenuBar menuBar;
+    JMenu fileMenu;
+    JMenuItem newFileItem;
+    JMenuItem saveFileItem;
+    JMenu editMenu;
+    JMenuItem undoItem;
+    JMenuItem searchWordItem;
 
-    public TextEditorGUI() {
-        frame = new JFrame("Texteditor");
-        frame.setLayout(new BorderLayout());
-        frame.setSize(800,600);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    JTextArea textArea;
+
+    public TextEditorGUI(String title) {
+        super(title);
+        //frame = new JFrame("Texteditor");
+        setLayout(new BorderLayout());
+        setSize(600,800);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //// Creating the menu bar
-        JMenuBar menuBar =new JMenuBar();
+        this.menuBar =new JMenuBar();
 
 
         // Creating the file menu
-        JMenu fileMenu = new JMenu("Datei");
+        this.fileMenu = new JMenu("Datei");
         menuBar.add(fileMenu);
 
-        JMenuItem newItem = new JMenuItem("Neu");
-        fileMenu.add(newItem);
+        this.newFileItem = new JMenuItem("Neu");
+        fileMenu.add(newFileItem);
 
-        JMenuItem saveItem = new JMenuItem("Speichern");
-        fileMenu.add(saveItem);
+        this.saveFileItem = new JMenuItem("Speichern");
+        fileMenu.add(saveFileItem);
 
 
         // Creating the edit menu
-        JMenu editMenu = new JMenu("Bearbeiten");
+        this.editMenu = new JMenu("Bearbeiten");
         menuBar.add(editMenu);
 
-        JMenuItem undoItem = new JMenuItem("Rückgängig");
+        this.undoItem = new JMenuItem("Rückgängig");
         editMenu.add(undoItem);
 
-        JMenuItem searchItem = new JMenuItem("Suchen");
-        editMenu.add(searchItem);
+        this.searchWordItem = new JMenuItem("Suchen");
+        editMenu.add(searchWordItem);
 
         // Adding the meu bar to JFrame
-        frame.setJMenuBar(menuBar);
+        setJMenuBar(menuBar);
 
 
         //// Creating the Toolbar
@@ -54,14 +64,43 @@ public class TextEditorGUI {
 
 
         //// Creating the text area
-        JTextArea textArea = new JTextArea();
+        this.textArea = new JTextArea();
         textArea.setLineWrap(true); // <- Implementing manual switching on and off later.
 
         // Adding the text area to JFrame
-        frame.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        add(new JScrollPane(textArea), BorderLayout.CENTER);
 
+        //pack(); //Is not used, because a certain size is needed, when opening the window.
 
-        frame.setVisible(true);
+        setVisible(true);
+    }
+
+    public JMenuItem getFileMenu() {
+        return fileMenu;
+    }
+
+    public JMenuItem getNewFileItem() {
+        return newFileItem;
+    }
+
+    public JMenuItem getSaveFileItem() {
+        return saveFileItem;
+    }
+
+    public JMenu getEditMenu() {
+        return editMenu;
+    }
+
+    public JMenuItem getUndoItem() {
+        return undoItem;
+    }
+
+    public JMenuItem getSearchWordItem() {
+        return searchWordItem;
+    }
+
+    public JTextArea getTextArea() {
+        return textArea;
     }
 
 }
