@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class TextEditorController implements ActionListener {
 
@@ -48,10 +50,10 @@ public class TextEditorController implements ActionListener {
                 createNewFile();
                 break;
             case "save":
-                System.out.println("\"Speichern\"-Funktion noch nicht implementiert.");
+                saveFile();
                 break;
             case "save as":
-                System.out.println("\"Speichern unter\"-Funktion noch nicht implementiert.");
+                saveFileAs();
                 break;
             default:
                 break;
@@ -78,5 +80,50 @@ public class TextEditorController implements ActionListener {
         }
         gui.getTextArea().setText("");
         currentFile = null;
+    }
+
+    private void saveFile() {
+        if (currentFile == null) {
+            saveFileAs();
+        } else {
+            writeFile(currentFile);
+        }
+    }
+
+    private void saveFileAs() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Speichern unter");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Textdateien (*.txt)", "txt"));
+
+        int userSelection = fileChooser.showSaveDialog(gui);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            if(!selectedFile.getName().contains(".")) {
+                selectedFile = new File(selectedFile.getAbsolutePath() + ".txt");
+            }
+
+            currentFile = selectedFile;
+            writeFile(currentFile);
+        }
+    }
+
+    private void writeFile(File file) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(gui.getTextArea().getText());
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Datei erfolgreich gespeichert: " + file.getAbsolutePath(),
+                    "Speichern erfolgreich",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Fehler beim Speichern der Datei:\n" + exception.getMessage(),
+                    "Speicherfehler",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 }
