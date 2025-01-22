@@ -13,11 +13,11 @@ public class TextEditorController implements ActionListener {
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
-        shortcuts();
+        initializeShortcuts();
         initializeListeners();
     }
 
-    public void shortcuts() {
+    public void initializeShortcuts() {
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
     }
 
