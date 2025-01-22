@@ -10,6 +10,7 @@ public class TextEditorGUI extends JFrame {
     JMenu fileMenu;
     JMenuItem newFileItem;
     JMenuItem saveFileItem;
+    JMenuItem saveFileAsItem;
     JMenu editMenu;
     JMenuItem undoItem;
     JMenuItem searchWordItem;
@@ -37,6 +38,9 @@ public class TextEditorGUI extends JFrame {
 
         this.saveFileItem = new JMenuItem("Speichern");
         fileMenu.add(saveFileItem);
+
+        this.saveFileAsItem = new JMenuItem("Speichern als");
+        fileMenu.add(saveFileAsItem);
 
 
         // Creating the edit menu
@@ -85,6 +89,10 @@ public class TextEditorGUI extends JFrame {
 
     public JMenuItem getSaveFileItem() {
         return saveFileItem;
+    }
+
+    public JMenuItem getSaveFileAsItem() {
+        return saveFileAsItem;
     }
 
     public JMenu getEditMenu() {
