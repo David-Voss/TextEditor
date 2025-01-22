@@ -6,10 +6,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.io.File;
 
 public class TextEditorController implements ActionListener {
 
     private final TextEditorGUI gui;
+    private File currentFile = null;
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
@@ -43,13 +45,14 @@ public class TextEditorController implements ActionListener {
 
         switch (actionCommand) {
             case "new":
-                gui.getTextArea().setText("");
+                createNewFile();
                 break;
             case "save":
                 System.out.println("\"Speichern\"-Funktion noch nicht implementiert.");
                 break;
             case "save as":
                 System.out.println("\"Speichern unter\"-Funktion noch nicht implementiert.");
+                break;
             default:
                 break;
         }
@@ -61,5 +64,19 @@ public class TextEditorController implements ActionListener {
         if (source == gui.getSaveFileItem()) {
             System.out.println("'Speichern'-Funktion noch nicht implementiert.");
         }*/
+    }
+
+    private void createNewFile() {
+        if (!gui.getTextArea().getText().isEmpty()) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    gui,
+                    "Ungespeicherte Änderungen gehen verloren. Fortfahren?",
+                    "Neue Datei erstellen",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (confirm != JOptionPane.YES_OPTION) return;
+        }
+        gui.getTextArea().setText("");
+        currentFile = null;
     }
 }
