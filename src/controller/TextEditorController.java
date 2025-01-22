@@ -19,25 +19,40 @@ public class TextEditorController implements ActionListener {
 
     public void initializeShortcuts() {
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
+        gui.getSaveFileItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
     }
 
     private void initializeListeners() {
         gui.getNewFileItem().addActionListener(this);
+        gui.getNewFileItem().setActionCommand("new");
+
         gui.getSaveFileItem().addActionListener(this);
-        gui.getUndoItem().addActionListener(this);
-        gui.getSearchWordItem().addActionListener(this);
+        gui.getSaveFileItem().setActionCommand("save");
+        //gui.getUndoItem().addActionListener(this);
+       // gui.getSearchWordItem().addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
+        //Object source = e.getSource();
+        String actionCommand = e.getActionCommand();
 
-        if (source == gui.getNewFileItem()) {
+        switch (actionCommand) {
+            case "new":
+                gui.getTextArea().setText("");
+                break;
+            case "save":
+                System.out.println("\"Speichern\"-Funktion noch nicht implementiert.");
+            default:
+                break;
+        }
+
+        /*if (source == gui.getNewFileItem()) {
             gui.getTextArea().setText("");
         }
 
         if (source == gui.getSaveFileItem()) {
             System.out.println("'Speichern'-Funktion noch nicht implementiert.");
-        }
+        }*/
     }
 }
