@@ -8,6 +8,7 @@ public class TextEditorGUI extends JFrame {
     //JFrame frame;
     JMenuBar menuBar;
     JMenu fileMenu;
+    JMenuItem openFileItem;
     JMenuItem newFileItem;
     JMenuItem saveFileItem;
     JMenuItem saveFileAsItem;
@@ -32,6 +33,9 @@ public class TextEditorGUI extends JFrame {
         // Creating the file menu
         this.fileMenu = new JMenu("Datei");
         menuBar.add(fileMenu);
+
+        this.openFileItem = new JMenuItem("Öffnen");
+        fileMenu.add((openFileItem));
 
         this.newFileItem = new JMenuItem("Neu");
         fileMenu.add(newFileItem);
@@ -81,6 +85,10 @@ public class TextEditorGUI extends JFrame {
 
     public JMenuItem getFileMenu() {
         return fileMenu;
+    }
+
+    public JMenuItem getOpenFileItem() {
+        return openFileItem;
     }
 
     public JMenuItem getNewFileItem() {

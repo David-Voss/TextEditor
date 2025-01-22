@@ -22,12 +22,16 @@ public class TextEditorController implements ActionListener {
     }
 
     public void initializeShortcuts() {
+        gui.getOpenFileItem().setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileAsItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
     }
 
     private void initializeListeners() {
+        gui.getOpenFileItem().addActionListener(this);
+        gui.getOpenFileItem().setActionCommand("open");
+
         gui.getNewFileItem().addActionListener(this);
         gui.getNewFileItem().setActionCommand("new");
 
@@ -46,6 +50,9 @@ public class TextEditorController implements ActionListener {
         String actionCommand = e.getActionCommand();
 
         switch (actionCommand) {
+            case "open":
+                openFile();
+                break;
             case "new":
                 createNewFile();
                 break;
@@ -66,6 +73,35 @@ public class TextEditorController implements ActionListener {
         if (source == gui.getSaveFileItem()) {
             System.out.println("'Speichern'-Funktion noch nicht implementiert.");
         }*/
+    }
+
+    private void openFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Datei öffnen");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Textdateien (*.txt)", "txt"));
+
+        int userSelection = fileChooser.showOpenDialog(gui);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            currentFile = fileChooser.getSelectedFile();
+
+            try {
+                String content = new String(java.nio.file.Files.readAllBytes(currentFile.toPath()));
+                gui.getTextArea().setText(content);
+                JOptionPane.showMessageDialog(
+                        gui,
+                        "Datei erfolgreich geöffnet: \n" + currentFile.getAbsolutePath(),
+                        "Datei geöffnet",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(
+                        gui,
+                        "Fehler beim Öffnen der Datei:\n" + exception.getMessage(),
+                        "Fehler",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
     }
 
     private void createNewFile() {
@@ -113,7 +149,7 @@ public class TextEditorController implements ActionListener {
             writer.write(gui.getTextArea().getText());
             JOptionPane.showMessageDialog(
                     gui,
-                    "Datei erfolgreich gespeichert: " + file.getAbsolutePath(),
+                    "Datei erfolgreich gespeichert:\n" + file.getAbsolutePath(),
                     "Speichern erfolgreich",
                     JOptionPane.INFORMATION_MESSAGE
             );
