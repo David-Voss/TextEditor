@@ -20,6 +20,7 @@ public class TextEditorController implements ActionListener {
     public void initializeShortcuts() {
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
+        gui.getSaveFileAsItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
     }
 
     private void initializeListeners() {
@@ -28,6 +29,9 @@ public class TextEditorController implements ActionListener {
 
         gui.getSaveFileItem().addActionListener(this);
         gui.getSaveFileItem().setActionCommand("save");
+
+        gui.getSaveFileAsItem().addActionListener(this);
+        gui.getSaveFileAsItem().setActionCommand("save as");
         //gui.getUndoItem().addActionListener(this);
        // gui.getSearchWordItem().addActionListener(this);
     }
@@ -43,6 +47,9 @@ public class TextEditorController implements ActionListener {
                 break;
             case "save":
                 System.out.println("\"Speichern\"-Funktion noch nicht implementiert.");
+                break;
+            case "save as":
+                System.out.println("\"Speichern unter\"-Funktion noch nicht implementiert.");
             default:
                 break;
         }
