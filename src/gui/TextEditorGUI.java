@@ -7,13 +7,16 @@ public class TextEditorGUI extends JFrame {
 
     //JFrame frame;
     JMenuBar menuBar;
+
     JMenu fileMenu;
     JMenuItem openFileItem;
     JMenuItem newFileItem;
     JMenuItem saveFileItem;
     JMenuItem saveFileAsItem;
+
     JMenu editMenu;
     JMenuItem undoItem;
+    JMenuItem redoItem;
     JMenuItem searchWordItem;
 
     JTextArea textArea;
@@ -53,6 +56,9 @@ public class TextEditorGUI extends JFrame {
 
         this.undoItem = new JMenuItem("Rückgängig");
         editMenu.add(undoItem);
+
+        this.redoItem = new JMenuItem("Wiederherstellen");
+        editMenu.add(redoItem);
 
         this.searchWordItem = new JMenuItem("Suchen");
         editMenu.add(searchWordItem);
@@ -109,6 +115,10 @@ public class TextEditorGUI extends JFrame {
 
     public JMenuItem getUndoItem() {
         return undoItem;
+    }
+
+    public JMenuItem getRedoItem() {
+        return redoItem;
     }
 
     public JMenuItem getSearchWordItem() {

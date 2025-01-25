@@ -35,6 +35,7 @@ public class TextEditorController implements ActionListener {
 
         // Shortcuts 'Edit' menu
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
+        gui.getRedoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getSearchWordItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
     }
 
@@ -55,7 +56,12 @@ public class TextEditorController implements ActionListener {
         // Listeners 'Edit' menu
         gui.getUndoItem().addActionListener(this);
         gui.getUndoItem().setActionCommand("undo");
-       // gui.getSearchWordItem().addActionListener(this);
+
+        gui.getRedoItem().addActionListener(this);
+        gui.getRedoItem().setActionCommand("redo");
+
+        //gui.getSearchWordItem().addActionListener(this);
+        //gui.getSearchWordItem().setActionCommand("search");
     }
 
     @Override
@@ -81,6 +87,8 @@ public class TextEditorController implements ActionListener {
             case "undo":
                 undo();
                 break;
+            case "redo":
+                redo();
             default:
                 break;
         }
@@ -209,7 +217,20 @@ public class TextEditorController implements ActionListener {
             JOptionPane.showMessageDialog(
                     gui,
                     "Es gibt nichts zum Rückgängig machen.",
-                    "Rückgängi",
+                    "Rückgängig",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }
+
+    private void redo() {
+        if (undoManager.canRedo()) {
+            undoManager.redo();
+        } else {
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Es gibt nichts zum Wiederherstellen.",
+                    "Wiederherstellen",
                     JOptionPane.INFORMATION_MESSAGE
             );
         }
