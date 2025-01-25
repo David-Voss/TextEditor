@@ -23,6 +23,7 @@ public class TextEditorController implements ActionListener {
         this.gui = gui;
         initialiseShortcuts();
         initialiseUndoManager();
+        updateUndoRedoState();
         initialiseListeners();
     }
 
@@ -206,13 +207,20 @@ public class TextEditorController implements ActionListener {
             @Override
             public void undoableEditHappened(UndoableEditEvent e) {
                 undoManager.addEdit(e.getEdit());
+                updateUndoRedoState();
             }
         });
+    }
+
+    public void updateUndoRedoState() {
+        gui.getUndoItem().setEnabled(undoManager.canUndo());
+        gui.getRedoItem().setEnabled(undoManager.canRedo());
     }
 
     private void undo() {
         if (undoManager.canUndo()) {
             undoManager.undo();
+            updateUndoRedoState();
         } else {
             JOptionPane.showMessageDialog(
                     gui,
@@ -226,6 +234,7 @@ public class TextEditorController implements ActionListener {
     private void redo() {
         if (undoManager.canRedo()) {
             undoManager.redo();
+            updateUndoRedoState();
         } else {
             JOptionPane.showMessageDialog(
                     gui,
