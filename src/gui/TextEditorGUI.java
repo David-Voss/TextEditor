@@ -43,7 +43,7 @@ public class TextEditorGUI extends JFrame {
         this.saveFileItem = new JMenuItem("Speichern");
         fileMenu.add(saveFileItem);
 
-        this.saveFileAsItem = new JMenuItem("Speichern als");
+        this.saveFileAsItem = new JMenuItem("Speichern unter");
         fileMenu.add(saveFileAsItem);
 
 

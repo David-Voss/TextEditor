@@ -75,6 +75,14 @@ public class TextEditorController implements ActionListener {
         }*/
     }
 
+    private void updateTitle() {
+        if (currentFile != null) {
+            gui.setTitle("Texteditor | " + currentFile.getName());
+        } else {
+            gui.setTitle("Texteditor | Unbenannt");
+        }
+    }
+
     private void openFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Datei öffnen");
@@ -87,6 +95,9 @@ public class TextEditorController implements ActionListener {
             try {
                 String content = new String(java.nio.file.Files.readAllBytes(currentFile.toPath()));
                 gui.getTextArea().setText(content);
+
+                updateTitle();
+
                 JOptionPane.showMessageDialog(
                         gui,
                         "Datei erfolgreich geöffnet: \n" + currentFile.getAbsolutePath(),
@@ -116,6 +127,7 @@ public class TextEditorController implements ActionListener {
         }
         gui.getTextArea().setText("");
         currentFile = null;
+        updateTitle();
     }
 
     private void saveFile() {
@@ -147,6 +159,9 @@ public class TextEditorController implements ActionListener {
     private void writeFile(File file) {
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(gui.getTextArea().getText());
+
+            updateTitle();
+
             JOptionPane.showMessageDialog(
                     gui,
                     "Datei erfolgreich gespeichert:\n" + file.getAbsolutePath(),

@@ -10,7 +10,7 @@ public class TextEditorMain {
     public static class RunTextEditor {
 
         public RunTextEditor() {
-            TextEditorGUI gui = new TextEditorGUI("Texteditor");
+            TextEditorGUI gui = new TextEditorGUI("Texteditor | Unbenannt");
             new TextEditorController(gui);
         }
     }
