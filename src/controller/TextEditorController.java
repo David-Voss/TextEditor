@@ -3,6 +3,9 @@ package controller;
 import gui.TextEditorGUI;
 
 import javax.swing.*;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -14,24 +17,29 @@ public class TextEditorController implements ActionListener {
 
     private final TextEditorGUI gui;
     private File currentFile = null;
+    private final UndoManager undoManager = new UndoManager();
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
-        initializeShortcuts();
-        initializeListeners();
+        initialiseShortcuts();
+        initialiseUndoManager();
+        initialiseListeners();
     }
 
-    public void initializeShortcuts() {
+    public void initialiseShortcuts() {
+        // Shortcuts 'File' menu
         gui.getOpenFileItem().setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileAsItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 
+        // Shortcuts 'Edit' menu
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         gui.getSearchWordItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
     }
 
-    private void initializeListeners() {
+    private void initialiseListeners() {
+        // Listeners 'File' menu
         gui.getOpenFileItem().addActionListener(this);
         gui.getOpenFileItem().setActionCommand("open");
 
@@ -43,7 +51,10 @@ public class TextEditorController implements ActionListener {
 
         gui.getSaveFileAsItem().addActionListener(this);
         gui.getSaveFileAsItem().setActionCommand("save as");
-        //gui.getUndoItem().addActionListener(this);
+
+        // Listeners 'Edit' menu
+        gui.getUndoItem().addActionListener(this);
+        gui.getUndoItem().setActionCommand("undo");
        // gui.getSearchWordItem().addActionListener(this);
     }
 
@@ -53,6 +64,7 @@ public class TextEditorController implements ActionListener {
         String actionCommand = e.getActionCommand();
 
         switch (actionCommand) {
+            // 'File' menu actions
             case "open":
                 openFile();
                 break;
@@ -65,17 +77,13 @@ public class TextEditorController implements ActionListener {
             case "save as":
                 saveFileAs();
                 break;
+            // 'Edit' menu actions
+            case "undo":
+                undo();
+                break;
             default:
                 break;
         }
-
-        /*if (source == gui.getNewFileItem()) {
-            gui.getTextArea().setText("");
-        }
-
-        if (source == gui.getSaveFileItem()) {
-            System.out.println("'Speichern'-Funktion noch nicht implementiert.");
-        }*/
     }
 
     private void updateTitle() {
@@ -85,6 +93,8 @@ public class TextEditorController implements ActionListener {
             gui.setTitle("Texteditor | Unbenannt");
         }
     }
+
+    //// 'File' menu methods / functions
 
     private void openFile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -177,6 +187,30 @@ public class TextEditorController implements ActionListener {
                     "Fehler beim Speichern der Datei:\n" + exception.getMessage(),
                     "Speicherfehler",
                     JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    //// 'Edit' menu methods / functions
+
+    private void initialiseUndoManager() {
+        gui.getTextArea().getDocument().addUndoableEditListener(new UndoableEditListener() {
+            @Override
+            public void undoableEditHappened(UndoableEditEvent e) {
+                undoManager.addEdit(e.getEdit());
+            }
+        });
+    }
+
+    private void undo() {
+        if (undoManager.canUndo()) {
+            undoManager.undo();
+        } else {
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Es gibt nichts zum Rückgängig machen.",
+                    "Rückgängi",
+                    JOptionPane.INFORMATION_MESSAGE
             );
         }
     }
