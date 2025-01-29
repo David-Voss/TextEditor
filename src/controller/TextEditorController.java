@@ -1,6 +1,7 @@
 package controller;
 
 import gui.TextEditorGUI;
+import gui.SearchAndReplaceDialogWindow;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
@@ -18,9 +19,13 @@ public class TextEditorController implements ActionListener {
     private final TextEditorGUI gui;
     private File currentFile = null;
     private final UndoManager undoManager = new UndoManager();
+    private final SearchAndReplaceDialogWindow searchAndReplaceDialogWindow;
+    private final SearchAndReplaceManager searchAndReplaceManager;
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
+        this.searchAndReplaceManager = new SearchAndReplaceManager(gui.getTextArea());
+        this.searchAndReplaceDialogWindow = new SearchAndReplaceDialogWindow(gui, searchAndReplaceManager);
         initialiseShortcuts();
         initialiseUndoManager();
         updateUndoRedoState();
@@ -61,8 +66,14 @@ public class TextEditorController implements ActionListener {
         gui.getRedoItem().addActionListener(this);
         gui.getRedoItem().setActionCommand("redo");
 
-        //gui.getSearchWordItem().addActionListener(this);
-        //gui.getSearchWordItem().setActionCommand("search");
+        gui.getSearchWordItem().addActionListener(this);
+        gui.getSearchWordItem().setActionCommand("search dialog");
+
+        searchAndReplaceDialogWindow.getSearchButton().addActionListener(this);
+        searchAndReplaceDialogWindow.getSearchButton().setActionCommand("search");
+
+        searchAndReplaceDialogWindow.getReplaceButton().addActionListener(this);
+        searchAndReplaceDialogWindow.getReplaceButton().setActionCommand("replace");
     }
 
     @Override
@@ -90,6 +101,16 @@ public class TextEditorController implements ActionListener {
                 break;
             case "redo":
                 redo();
+                break;
+            case "search dialog":
+                searchAndReplaceDialogWindow.showSearchAndReplaceDialog();
+                break;
+            case "search":
+                search();
+                break;
+            case "replace":
+                replace();
+                break;
             default:
                 break;
         }
@@ -244,4 +265,21 @@ public class TextEditorController implements ActionListener {
             );
         }
     }
+
+    private void search() {
+        String searchTerm = searchAndReplaceDialogWindow.getSearchField().getText();
+        boolean isCaseSensitive = searchAndReplaceDialogWindow.getCaseSensitiveCheck().isSelected();
+
+        searchAndReplaceManager.search(searchTerm, isCaseSensitive);
+    }
+
+    private void replace() {
+        String searchTerm = searchAndReplaceDialogWindow.getSearchField().getText();
+        String replaceTerm = searchAndReplaceDialogWindow.getReplaceField().getText();
+        boolean isCaseSensitive = searchAndReplaceDialogWindow.getCaseSensitiveCheck().isSelected();
+
+        searchAndReplaceManager.replace(searchTerm, replaceTerm, isCaseSensitive);
+    }
+
+
 }
