@@ -10,6 +10,7 @@ public class SearchAndReplaceDialogWindow extends JDialog {
     JPanel searchPanel;
     JTextField searchField;
     JTextField replaceField;
+    JPanel caseSensitivePanel;
     JCheckBox caseSensitiveCheckBox;
     JButton searchButton;
     JButton replaceButton;
@@ -18,10 +19,10 @@ public class SearchAndReplaceDialogWindow extends JDialog {
         super(parent, "Suchen und Ersetzen", false);
 
         setLayout(new BorderLayout());
-        setSize(400, 200);
+        setSize(300, 150);
 
         // Search and replace area
-        this.searchPanel = new JPanel(new GridLayout(3,2,5,5));
+        this.searchPanel = new JPanel(new GridLayout(2,2,0,5));
 
         searchPanel.add(new JLabel("Suchen:"));
         searchField = new JTextField(20);
@@ -31,10 +32,15 @@ public class SearchAndReplaceDialogWindow extends JDialog {
         replaceField = new JTextField(20);
         searchPanel.add(replaceField);
 
-        caseSensitiveCheckBox = new JCheckBox("Groß- / Kleinschreibung beachten");
-        searchPanel.add(caseSensitiveCheckBox);
+        add(searchPanel, BorderLayout.NORTH);
 
-        add(searchPanel, BorderLayout.CENTER);
+        // Case-sensitive Checkbox
+        this.caseSensitivePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        caseSensitiveCheckBox = new JCheckBox("Groß- / Kleinschreibung beachten");
+        caseSensitivePanel.add(caseSensitiveCheckBox);
+
+        add(caseSensitivePanel, BorderLayout.CENTER);
 
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
