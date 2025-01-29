@@ -6,11 +6,13 @@ import gui.SearchAndReplaceDialogWindow;
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -18,6 +20,12 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 
 public class TextEditorController implements ActionListener {
 
@@ -49,6 +57,7 @@ public class TextEditorController implements ActionListener {
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         gui.getRedoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getSearchWordItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
+        gui.getDateTimeItem().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
     }
 
     private void initialiseListeners() {
@@ -83,6 +92,9 @@ public class TextEditorController implements ActionListener {
 
         searchAndReplaceDialogWindow.getReplaceButton().addActionListener(this);
         searchAndReplaceDialogWindow.getReplaceButton().setActionCommand("replace");
+
+        gui.getDateTimeItem().addActionListener(this);
+        gui.getDateTimeItem().setActionCommand("date/time");
     }
 
     @Override
@@ -122,6 +134,9 @@ public class TextEditorController implements ActionListener {
                 break;
             case "replace":
                 replace();
+                break;
+            case "date/time":
+                dateTime();
                 break;
             default:
                 break;
@@ -332,5 +347,33 @@ public class TextEditorController implements ActionListener {
         searchAndReplaceManager.replace(searchTerm, replaceTerm, isCaseSensitive);
     }
 
+    public void dateTime() {
+        JTextArea textArea = gui.getTextArea();
+        int cursorPosition = textArea.getCaretPosition();
+
+
+        // Get system locale and timezone
+        Locale systemLocale = Locale.getDefault();
+        ZoneId systemTimeZone = ZoneId.systemDefault();
+
+        // Format for date & time
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(systemLocale);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(systemLocale);
+
+        // Merge date & time
+        ZonedDateTime dateTimeNow = ZonedDateTime.now(systemTimeZone);
+        String dateTimeString = dateTimeNow.format(dateFormatter) + " " + dateTimeNow.format(timeFormatter);
+
+        try {
+            textArea.getDocument().insertString(cursorPosition, dateTimeString, null);
+        } catch (BadLocationException exception) {
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Fehler beim Einfügen von Datum und Uhrzeit",
+                    "Datum/Uhrzeit Fehler",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
 
 }

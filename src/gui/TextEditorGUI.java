@@ -19,6 +19,7 @@ public class TextEditorGUI extends JFrame {
     JMenuItem undoItem;
     JMenuItem redoItem;
     JMenuItem searchWordItem;
+    JMenuItem dateTimeItem;
 
     JTextArea textArea;
 
@@ -66,6 +67,9 @@ public class TextEditorGUI extends JFrame {
 
         this.searchWordItem = new JMenuItem("Suchen");
         editMenu.add(searchWordItem);
+
+        this.dateTimeItem = new JMenuItem("Datum/Uhrzeit");
+        editMenu.add(dateTimeItem);
 
         // Adding the meu bar to JFrame
         setJMenuBar(menuBar);
@@ -123,6 +127,10 @@ public class TextEditorGUI extends JFrame {
 
     public JMenuItem getSearchWordItem() {
         return searchWordItem;
+    }
+
+    public JMenuItem getDateTimeItem() {
+        return dateTimeItem;
     }
 
     public JTextArea getTextArea() {
