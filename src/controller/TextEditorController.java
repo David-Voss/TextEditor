@@ -7,9 +7,14 @@ import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,6 +43,7 @@ public class TextEditorController implements ActionListener {
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileAsItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        gui.getPrintDocumentItem().setAccelerator(KeyStroke.getKeyStroke('P', InputEvent.CTRL_DOWN_MASK));
 
         // Shortcuts 'Edit' menu
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
@@ -58,6 +64,9 @@ public class TextEditorController implements ActionListener {
 
         gui.getSaveFileAsItem().addActionListener(this);
         gui.getSaveFileAsItem().setActionCommand("save as");
+
+        gui.getPrintDocumentItem().addActionListener(this);
+        gui.getPrintDocumentItem().setActionCommand("print");
 
         // Listeners 'Edit' menu
         gui.getUndoItem().addActionListener(this);
@@ -94,6 +103,9 @@ public class TextEditorController implements ActionListener {
                 break;
             case "save as":
                 saveFileAs();
+                break;
+            case "print":
+                printDocument();
                 break;
             // 'Edit' menu actions
             case "undo":
@@ -218,6 +230,45 @@ public class TextEditorController implements ActionListener {
                     "Speicherfehler",
                     JOptionPane.ERROR_MESSAGE
             );
+        }
+    }
+
+    public void printDocument() {
+        PrinterJob printerJob = PrinterJob.getPrinterJob();
+        printerJob.setJobName(gui.getTitle());
+
+        printerJob.setPrintable(new Printable() {
+            @Override
+            public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+                if (pageIndex > 0) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+
+                Graphics2D g2d = (Graphics2D) graphics;
+                g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+                try {
+                    // Prints the entire content
+                    JTextArea textArea = gui.getTextArea();
+                    textArea.printAll(graphics);
+                } catch (Exception exception) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+                return Printable.PAGE_EXISTS;
+            }
+        });
+
+        boolean canPrint = printerJob.printDialog(); // Display print dialogue
+        if (canPrint) {
+            try {
+                printerJob.print();
+            } catch (PrinterException exception) {
+                JOptionPane.showMessageDialog(
+                        gui, "Druckfehler:\n" + exception.getMessage(),
+                        "Druckfehler",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
     }
 

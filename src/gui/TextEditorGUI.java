@@ -13,6 +13,7 @@ public class TextEditorGUI extends JFrame {
     JMenuItem newFileItem;
     JMenuItem saveFileItem;
     JMenuItem saveFileAsItem;
+    JMenuItem printDocumentItem;
 
     JMenu editMenu;
     JMenuItem undoItem;
@@ -25,14 +26,13 @@ public class TextEditorGUI extends JFrame {
         super(title);
         //frame = new JFrame("Texteditor");
         setLayout(new BorderLayout());
-        setSize(600,800);
+        setSize(550,750);
         //setLocationRelativeTo(null);
         centerWindow();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //// Creating the menu bar
         this.menuBar =new JMenuBar();
-
 
         // Creating the file menu
         this.fileMenu = new JMenu("Datei");
@@ -49,6 +49,9 @@ public class TextEditorGUI extends JFrame {
 
         this.saveFileAsItem = new JMenuItem("Speichern unter");
         fileMenu.add(saveFileAsItem);
+
+        this.printDocumentItem = new JMenuItem("Drucken");
+        fileMenu.add(printDocumentItem);
 
 
         // Creating the edit menu
@@ -90,10 +93,6 @@ public class TextEditorGUI extends JFrame {
         setVisible(true);
     }
 
-    public JMenuItem getFileMenu() {
-        return fileMenu;
-    }
-
     public JMenuItem getOpenFileItem() {
         return openFileItem;
     }
@@ -110,8 +109,8 @@ public class TextEditorGUI extends JFrame {
         return saveFileAsItem;
     }
 
-    public JMenu getEditMenu() {
-        return editMenu;
+    public JMenuItem getPrintDocumentItem() {
+        return printDocumentItem;
     }
 
     public JMenuItem getUndoItem() {
