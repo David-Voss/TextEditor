@@ -26,7 +26,8 @@ public class TextEditorGUI extends JFrame {
         //frame = new JFrame("Texteditor");
         setLayout(new BorderLayout());
         setSize(600,800);
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
+        centerWindow();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //// Creating the menu bar
@@ -127,6 +128,13 @@ public class TextEditorGUI extends JFrame {
 
     public JTextArea getTextArea() {
         return textArea;
+    }
+
+    private void centerWindow() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - getWidth()) / 2;
+        int y = (screenSize.height - getHeight()) / 2;
+        setLocation(x, y);
     }
 
 }

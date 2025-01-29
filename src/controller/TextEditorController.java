@@ -103,7 +103,7 @@ public class TextEditorController implements ActionListener {
                 redo();
                 break;
             case "search dialog":
-                searchAndReplaceDialogWindow.showSearchAndReplaceDialog();
+                searchAndReplaceDialogWindow.showSearchAndReplaceDialog(gui);
                 break;
             case "search":
                 search();

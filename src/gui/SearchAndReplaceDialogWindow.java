@@ -19,7 +19,6 @@ public class SearchAndReplaceDialogWindow extends JDialog {
 
         setLayout(new BorderLayout());
         setSize(400, 200);
-        setLocationRelativeTo(parent);
 
         // Search and replace area
         this.searchPanel = new JPanel(new GridLayout(3,2,5,5));
@@ -38,7 +37,7 @@ public class SearchAndReplaceDialogWindow extends JDialog {
         add(searchPanel, BorderLayout.CENTER);
 
         // Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         searchButton = new JButton("Suchen");
         buttonPanel.add(searchButton);
@@ -59,12 +58,9 @@ public class SearchAndReplaceDialogWindow extends JDialog {
         });
     }
 
-    public void showSearchAndReplaceDialog() {
+    public void showSearchAndReplaceDialog(JFrame parent) {
         setVisible(true);
-    }
-
-    public JPanel getSearchPanel() {
-        return searchPanel;
+        setDialogWindowLocation(parent);
     }
 
     public JTextField getSearchField() {
@@ -85,6 +81,18 @@ public class SearchAndReplaceDialogWindow extends JDialog {
 
     public JButton getReplaceButton() {
         return replaceButton;
+    }
+
+    // Centres the dialogue relative to the parent window.
+    //  If parent is 'null', the window is placed in the centre of the screen.
+    private void setDialogWindowLocation (JFrame parent) {
+        if (parent != null) {
+            int x = parent.getX() + (parent.getWidth() - getWidth()) / 2;
+            int y = parent.getY() + (parent.getHeight() - getHeight()) / 2;
+            setLocation(x, y);
+        } else {
+            setLocationRelativeTo(null); // Fallback zur Bildschirmmitte
+        }
     }
 
 }
