@@ -9,8 +9,8 @@ public class TextEditorStatusBar extends JPanel {
     private final JLabel charCountLabel;
 
     public TextEditorStatusBar() {
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS)); // Horizontal ausrichten
-        setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5)); // Innenabstand
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS)); // Align horizontally
+        setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5)); // internal spacing
 
         cursorPositionLabel = new JLabel("Ze 1, Sp 1");
         add(cursorPositionLabel);
@@ -26,11 +26,11 @@ public class TextEditorStatusBar extends JPanel {
     }
 
     private void addSeparator() {
-        add(Box.createHorizontalStrut(10)); // Abstand
+        add(Box.createHorizontalStrut(10)); // Spacing
         JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-        separator.setPreferredSize(new Dimension(2, 15)); // Breite & Höhe setzen
+        separator.setPreferredSize(new Dimension(2, 15)); // Set width & height
         add(separator);
-        add(Box.createHorizontalStrut(10)); // Abstand
+        add(Box.createHorizontalStrut(10)); // Spacing
     }
 
     public void updateCursorPosition(int line, int column) {

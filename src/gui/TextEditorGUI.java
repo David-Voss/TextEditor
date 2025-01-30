@@ -19,8 +19,11 @@ public class TextEditorGUI extends JFrame {
     JMenu editMenu;
     JMenuItem undoItem;
     JMenuItem redoItem;
+    JMenuItem webSearchItem;
     JMenuItem searchWordItem;
     JMenuItem dateTimeItem;
+
+    private final TextEditorToolBar toolBar;
 
     JTextArea textArea;
 
@@ -28,10 +31,8 @@ public class TextEditorGUI extends JFrame {
 
     public TextEditorGUI(String title) {
         super(title);
-        //frame = new JFrame("Texteditor");
         setLayout(new BorderLayout());
         setSize(550,750);
-        //setLocationRelativeTo(null);
         centerWindow();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -59,7 +60,6 @@ public class TextEditorGUI extends JFrame {
         this.printDocumentItem = new JMenuItem("Drucken");
         fileMenu.add(printDocumentItem);
 
-
         // Creating the edit menu
         this.editMenu = new JMenu("Bearbeiten");
         menuBar.add(editMenu);
@@ -69,6 +69,12 @@ public class TextEditorGUI extends JFrame {
 
         this.redoItem = new JMenuItem("Wiederherstellen");
         editMenu.add(redoItem);
+
+        editMenu.addSeparator();
+
+        this.webSearchItem = new JMenuItem("Mit Google suchen");
+        webSearchItem.setEnabled(false);
+        editMenu.add(webSearchItem);
 
         editMenu.addSeparator();
 
@@ -83,16 +89,9 @@ public class TextEditorGUI extends JFrame {
         // Adding the meu bar to JFrame
         setJMenuBar(menuBar);
 
-
-        //// Creating the Toolbar
-        JToolBar toolBar = new JToolBar();
-        JButton newButton = new JButton(new ImageIcon("assets/icons/file-regular.png"));
-        newButton.setToolTipText("Neue Datei erstellen");
-        toolBar.add(newButton);
-
-        // Adding the toolbar to JFrame
-        //frame.add(toolBar, BorderLayout.NORTH);
-
+        //// Creating and adding the Toolbar
+        toolBar = new TextEditorToolBar();
+        add(toolBar, BorderLayout.NORTH);
 
         //// Creating the text area
         this.textArea = new JTextArea();
@@ -100,8 +99,6 @@ public class TextEditorGUI extends JFrame {
 
         // Adding the text area to JFrame
         add(new JScrollPane(textArea), BorderLayout.CENTER);
-
-        //pack(); //Is not used, because a certain size is needed, when opening the window.
 
         //// Adding the status bar
         statusBar = new TextEditorStatusBar();
@@ -111,49 +108,21 @@ public class TextEditorGUI extends JFrame {
         setVisible(true);
     }
 
-    public JMenuItem getOpenFileItem() {
-        return openFileItem;
-    }
+    public JMenuItem getOpenFileItem() { return openFileItem; }
+    public JMenuItem getNewFileItem() { return newFileItem; }
+    public JMenuItem getSaveFileItem() { return saveFileItem; }
+    public JMenuItem getSaveFileAsItem() { return saveFileAsItem; }
 
-    public JMenuItem getNewFileItem() {
-        return newFileItem;
-    }
+    public JMenuItem getPrintDocumentItem() { return printDocumentItem; }
+    public JMenuItem getUndoItem() { return undoItem; }
+    public JMenuItem getRedoItem() {  return redoItem; }
+    public JMenuItem getWebSearchItem() { return webSearchItem; }
+    public JMenuItem getSearchWordItem() { return searchWordItem; }
+    public JMenuItem getDateTimeItem() { return dateTimeItem; }
 
-    public JMenuItem getSaveFileItem() {
-        return saveFileItem;
-    }
+    public TextEditorToolBar getToolBar() { return toolBar; }
 
-    public JMenuItem getSaveFileAsItem() {
-        return saveFileAsItem;
-    }
-
-    public JMenuItem getPrintDocumentItem() {
-        return printDocumentItem;
-    }
-
-    public JMenuItem getUndoItem() {
-        return undoItem;
-    }
-
-    public JMenuItem getRedoItem() {
-        return redoItem;
-    }
-
-    public JMenuItem getSearchWordItem() {
-        return searchWordItem;
-    }
-
-    public JMenuItem getDateTimeItem() {
-        return dateTimeItem;
-    }
-
-    public JTextArea getTextArea() {
-        return textArea;
-    }
-
-    public TextEditorStatusBar getStatusBar() {
-        return statusBar;
-    }
+    public JTextArea getTextArea() { return textArea; }
 
     private void centerWindow() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -161,5 +130,4 @@ public class TextEditorGUI extends JFrame {
         int y = (screenSize.height - getHeight()) / 2;
         setLocation(x, y);
     }
-
 }

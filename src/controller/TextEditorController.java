@@ -20,6 +20,9 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,12 +36,14 @@ public class TextEditorController implements ActionListener {
     private final UndoManager undoManager = new UndoManager();
     private final SearchAndReplaceDialogWindow searchAndReplaceDialogWindow;
     private final SearchAndReplaceManager searchAndReplaceManager;
-    //private final StatusBarManager statusBarManager;
+    private final ToolBarManager toolBarManager;
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
         this.searchAndReplaceManager = new SearchAndReplaceManager(gui.getTextArea());
         this.searchAndReplaceDialogWindow = new SearchAndReplaceDialogWindow(gui, searchAndReplaceManager);
+        this.toolBarManager = new ToolBarManager(gui.getToolBar(), this);
+
         //this.statusBarManager = new StatusBarManager(gui.getStatusBar(), gui.getTextArea());
         initialiseShortcuts();
         initialiseUndoManager();
@@ -48,8 +53,8 @@ public class TextEditorController implements ActionListener {
 
     public void initialiseShortcuts() {
         // Shortcuts 'File' menu
-        gui.getOpenFileItem().setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
+        gui.getOpenFileItem().setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
         gui.getSaveFileAsItem().setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getPrintDocumentItem().setAccelerator(KeyStroke.getKeyStroke('P', InputEvent.CTRL_DOWN_MASK));
@@ -57,23 +62,26 @@ public class TextEditorController implements ActionListener {
         // Shortcuts 'Edit' menu
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         gui.getRedoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        gui.getWebSearchItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getSearchWordItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
         gui.getDateTimeItem().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
     }
 
     private void initialiseListeners() {
-        // Listeners 'File' menu
-        gui.getOpenFileItem().addActionListener(this);
-        gui.getOpenFileItem().setActionCommand("open");
+        gui.getTextArea().addCaretListener(e -> updateWebSearchItemStatus());
 
+        // Listeners 'File' menu
         gui.getNewFileItem().addActionListener(this);
         gui.getNewFileItem().setActionCommand("new");
+
+        gui.getOpenFileItem().addActionListener(this);
+        gui.getOpenFileItem().setActionCommand("open");
 
         gui.getSaveFileItem().addActionListener(this);
         gui.getSaveFileItem().setActionCommand("save");
 
         gui.getSaveFileAsItem().addActionListener(this);
-        gui.getSaveFileAsItem().setActionCommand("save as");
+        gui.getSaveFileAsItem().setActionCommand("save_as");
 
         gui.getPrintDocumentItem().addActionListener(this);
         gui.getPrintDocumentItem().setActionCommand("print");
@@ -85,8 +93,11 @@ public class TextEditorController implements ActionListener {
         gui.getRedoItem().addActionListener(this);
         gui.getRedoItem().setActionCommand("redo");
 
+        gui.getWebSearchItem().addActionListener(this);
+        gui.getWebSearchItem().setActionCommand("web_search");
+
         gui.getSearchWordItem().addActionListener(this);
-        gui.getSearchWordItem().setActionCommand("search dialog");
+        gui.getSearchWordItem().setActionCommand("search_dialog");
 
         searchAndReplaceDialogWindow.getSearchButton().addActionListener(this);
         searchAndReplaceDialogWindow.getSearchButton().setActionCommand("search");
@@ -100,21 +111,20 @@ public class TextEditorController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Object source = e.getSource();
         String actionCommand = e.getActionCommand();
 
         switch (actionCommand) {
             // 'File' menu actions
-            case "open":
-                openFile();
-                break;
             case "new":
                 createNewFile();
+                break;
+            case "open":
+                openFile();
                 break;
             case "save":
                 saveFile();
                 break;
-            case "save as":
+            case "save_as":
                 saveFileAs();
                 break;
             case "print":
@@ -127,7 +137,10 @@ public class TextEditorController implements ActionListener {
             case "redo":
                 redo();
                 break;
-            case "search dialog":
+            case "web_search":
+                webSearch();
+                break;
+            case "search_dialog":
                 searchAndReplaceDialogWindow.showSearchAndReplaceDialog(gui);
                 break;
             case "search":
@@ -154,7 +167,7 @@ public class TextEditorController implements ActionListener {
 
     //// 'File' menu methods / functions
 
-    private void openFile() {
+    protected void openFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Datei öffnen");
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Textdateien (*.txt)", "txt"));
@@ -186,7 +199,7 @@ public class TextEditorController implements ActionListener {
         }
     }
 
-    private void createNewFile() {
+    protected void createNewFile() {
         if (!gui.getTextArea().getText().isEmpty()) {
             int confirm = JOptionPane.showConfirmDialog(
                     gui,
@@ -201,7 +214,7 @@ public class TextEditorController implements ActionListener {
         updateTitle();
     }
 
-    private void saveFile() {
+    protected void saveFile() {
         if (currentFile == null) {
             saveFileAs();
         } else {
@@ -249,7 +262,7 @@ public class TextEditorController implements ActionListener {
         }
     }
 
-    public void printDocument() {
+    protected void printDocument() {
         PrinterJob printerJob = PrinterJob.getPrinterJob();
         printerJob.setJobName(gui.getTitle());
 
@@ -305,7 +318,7 @@ public class TextEditorController implements ActionListener {
         gui.getRedoItem().setEnabled(undoManager.canRedo());
     }
 
-    private void undo() {
+    protected void undo() {
         if (undoManager.canUndo()) {
             undoManager.undo();
             updateUndoRedoState();
@@ -319,7 +332,7 @@ public class TextEditorController implements ActionListener {
         }
     }
 
-    private void redo() {
+    protected void redo() {
         if (undoManager.canRedo()) {
             undoManager.redo();
             updateUndoRedoState();
@@ -333,10 +346,36 @@ public class TextEditorController implements ActionListener {
         }
     }
 
-    private void search() {
+    protected void webSearch() {
+        String selectedText = gui.getTextArea().getSelectedText();
+        String query = URLEncoder.encode(selectedText, StandardCharsets.UTF_8);
+        String webSearchUrl = "https://www.google.com/search?q=" + query;
+
+        try {
+            Desktop.getDesktop().browse(URI.create(webSearchUrl));
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Fehler beim Öffnen des Browsers.",
+                    "Fehler",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void updateWebSearchItemStatus() {
+        boolean hasSelection = gui.getTextArea().getSelectedText() != null;
+        gui.getWebSearchItem().setEnabled(hasSelection);
+    }
+
+    protected void search() {
         String searchTerm = searchAndReplaceDialogWindow.getSearchField().getText();
         boolean isCaseSensitive = searchAndReplaceDialogWindow.getCaseSensitiveCheck().isSelected();
 
+        searchAndReplaceManager.search(searchTerm, isCaseSensitive);
+    }
+
+    protected void search(String searchTerm, boolean isCaseSensitive) {
         searchAndReplaceManager.search(searchTerm, isCaseSensitive);
     }
 
@@ -348,7 +387,7 @@ public class TextEditorController implements ActionListener {
         searchAndReplaceManager.replace(searchTerm, replaceTerm, isCaseSensitive);
     }
 
-    public void dateTime() {
+    private void dateTime() {
         JTextArea textArea = gui.getTextArea();
         int cursorPosition = textArea.getCaretPosition();
 
