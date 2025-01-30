@@ -20,7 +20,6 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,11 +33,13 @@ public class TextEditorController implements ActionListener {
     private final UndoManager undoManager = new UndoManager();
     private final SearchAndReplaceDialogWindow searchAndReplaceDialogWindow;
     private final SearchAndReplaceManager searchAndReplaceManager;
+    //private final StatusBarManager statusBarManager;
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
         this.searchAndReplaceManager = new SearchAndReplaceManager(gui.getTextArea());
         this.searchAndReplaceDialogWindow = new SearchAndReplaceDialogWindow(gui, searchAndReplaceManager);
+        //this.statusBarManager = new StatusBarManager(gui.getStatusBar(), gui.getTextArea());
         initialiseShortcuts();
         initialiseUndoManager();
         updateUndoRedoState();

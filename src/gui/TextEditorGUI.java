@@ -1,11 +1,12 @@
 package gui;
 
+import controller.StatusBarManager;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class TextEditorGUI extends JFrame {
 
-    //JFrame frame;
     JMenuBar menuBar;
 
     JMenu fileMenu;
@@ -23,6 +24,8 @@ public class TextEditorGUI extends JFrame {
 
     JTextArea textArea;
 
+    private final TextEditorStatusBar statusBar;
+
     public TextEditorGUI(String title) {
         super(title);
         //frame = new JFrame("Texteditor");
@@ -39,17 +42,19 @@ public class TextEditorGUI extends JFrame {
         this.fileMenu = new JMenu("Datei");
         menuBar.add(fileMenu);
 
-        this.openFileItem = new JMenuItem("Öffnen");
-        fileMenu.add((openFileItem));
-
         this.newFileItem = new JMenuItem("Neu");
         fileMenu.add(newFileItem);
+
+        this.openFileItem = new JMenuItem("Öffnen");
+        fileMenu.add((openFileItem));
 
         this.saveFileItem = new JMenuItem("Speichern");
         fileMenu.add(saveFileItem);
 
         this.saveFileAsItem = new JMenuItem("Speichern unter");
         fileMenu.add(saveFileAsItem);
+
+        fileMenu.addSeparator();
 
         this.printDocumentItem = new JMenuItem("Drucken");
         fileMenu.add(printDocumentItem);
@@ -65,8 +70,12 @@ public class TextEditorGUI extends JFrame {
         this.redoItem = new JMenuItem("Wiederherstellen");
         editMenu.add(redoItem);
 
+        editMenu.addSeparator();
+
         this.searchWordItem = new JMenuItem("Suchen");
         editMenu.add(searchWordItem);
+
+        editMenu.addSeparator();
 
         this.dateTimeItem = new JMenuItem("Datum/Uhrzeit");
         editMenu.add(dateTimeItem);
@@ -93,6 +102,11 @@ public class TextEditorGUI extends JFrame {
         add(new JScrollPane(textArea), BorderLayout.CENTER);
 
         //pack(); //Is not used, because a certain size is needed, when opening the window.
+
+        //// Adding the status bar
+        statusBar = new TextEditorStatusBar();
+        new StatusBarManager(statusBar, textArea);
+        add(statusBar, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -135,6 +149,10 @@ public class TextEditorGUI extends JFrame {
 
     public JTextArea getTextArea() {
         return textArea;
+    }
+
+    public TextEditorStatusBar getStatusBar() {
+        return statusBar;
     }
 
     private void centerWindow() {
