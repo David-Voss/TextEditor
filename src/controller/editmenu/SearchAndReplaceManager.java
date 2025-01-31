@@ -36,7 +36,7 @@ public class SearchAndReplaceManager implements ActionListener {
     }
 
     /**
-     * Registers event listeners for the search and replace dialogue.
+     * Registers event listeners for the search and replace dialog.
      */
     private void initialiseSearchAndReplaceListeners() {
         dialogWindow.addWindowListener(new WindowAdapter() {
@@ -51,6 +51,18 @@ public class SearchAndReplaceManager implements ActionListener {
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW
         );
+
+        textArea.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                clearHighlights();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        });
 
         registerEnterKeyListener(dialogWindow.getReplaceField(), "replace");
         registerEnterKeyListener(dialogWindow.getSearchField(), "search");
