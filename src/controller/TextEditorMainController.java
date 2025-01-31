@@ -1,8 +1,9 @@
 package controller;
 
 import controller.editmenu.EditMenuManager;
+import controller.editmenu.SearchAndReplaceManager;
 import controller.filemenu.FileMenuManager;
-import gui.TextEditorGUI;
+import gui.TextEditorMainGUI;
 import gui.SearchAndReplaceDialogWindow;
 
 import javax.swing.*;
@@ -12,16 +13,16 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-public class TextEditorController implements ActionListener {
+public class TextEditorMainController implements ActionListener {
 
-    private final TextEditorGUI gui;
+    private final TextEditorMainGUI gui;
     private final FileMenuManager fileMenuManager;
     private final EditMenuManager editMenuManager;
     private final SearchAndReplaceDialogWindow searchAndReplaceDialogWindow;
     private final SearchAndReplaceManager searchAndReplaceManager;
     private final ToolBarManager toolBarManager;
 
-    public TextEditorController(TextEditorGUI gui) {
+    public TextEditorMainController(TextEditorMainGUI gui) {
         this.gui = gui;
         this.fileMenuManager = new FileMenuManager(gui, this);
         this.editMenuManager = new EditMenuManager(gui, this);

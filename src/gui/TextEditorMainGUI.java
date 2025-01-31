@@ -5,7 +5,7 @@ import controller.StatusBarManager;
 import javax.swing.*;
 import java.awt.*;
 
-public class TextEditorGUI extends JFrame {
+public class TextEditorMainGUI extends JFrame {
 
     JMenuBar menuBar;
 
@@ -29,7 +29,7 @@ public class TextEditorGUI extends JFrame {
 
     private final TextEditorStatusBar statusBar;
 
-    public TextEditorGUI(String title) {
+    public TextEditorMainGUI(String title) {
         super(title);
         setLayout(new BorderLayout());
         setSize(550,750);

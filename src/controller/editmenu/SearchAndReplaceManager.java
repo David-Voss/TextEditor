@@ -1,7 +1,7 @@
-package controller;
+package controller.editmenu;
 
 import gui.SearchAndReplaceDialogWindow;
-import gui.TextEditorGUI;
+import gui.TextEditorMainGUI;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -13,13 +13,13 @@ import java.awt.event.WindowEvent;
 
 public class SearchAndReplaceManager implements ActionListener {
 
-    private final TextEditorGUI gui;
+    private final TextEditorMainGUI gui;
     private final JTextArea textArea;
     private final SearchAndReplaceDialogWindow dialogWindow;
     private int lastMatchIndex = -1;
     private boolean hasSearchFunctionBeenCalled = false;
 
-    public SearchAndReplaceManager(TextEditorGUI gui, SearchAndReplaceDialogWindow dialogWindow) {
+    public SearchAndReplaceManager(TextEditorMainGUI gui, SearchAndReplaceDialogWindow dialogWindow) {
         this. gui = gui;
         this.textArea = gui.getTextArea();
         this.dialogWindow = dialogWindow;

@@ -1,7 +1,7 @@
 package controller.filemenu;
 
-import controller.TextEditorController;
-import gui.TextEditorGUI;
+import controller.TextEditorMainController;
+import gui.TextEditorMainGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,13 +15,13 @@ import java.io.IOException;
 
 public class FileMenuManager {
 
-    private final TextEditorGUI gui;
-    private final TextEditorController textEditorController;
+    private final TextEditorMainGUI gui;
+    private final TextEditorMainController mainController;
     private File currentFile = null;
 
-    public FileMenuManager(TextEditorGUI gui, TextEditorController textEditorController) {
+    public FileMenuManager(TextEditorMainGUI gui, TextEditorMainController mainController) {
         this.gui = gui;
-        this.textEditorController = textEditorController;
+        this.mainController = mainController;
     }
 
     //// 'File' menu methods / functions
@@ -38,7 +38,7 @@ public class FileMenuManager {
             try {
                 String content = new String(java.nio.file.Files.readAllBytes(currentFile.toPath()));
                 gui.getTextArea().setText(content);
-                textEditorController.updateTitle(currentFile);
+                mainController.updateTitle(currentFile);
 
                 JOptionPane.showMessageDialog(
                         gui,
@@ -69,7 +69,7 @@ public class FileMenuManager {
         }
         gui.getTextArea().setText("");
         currentFile = null;
-        textEditorController.updateTitle(currentFile);
+        mainController.updateTitle(currentFile);
     }
 
     public void saveFile() {
@@ -101,7 +101,7 @@ public class FileMenuManager {
     private void writeFile(File file) {
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(gui.getTextArea().getText());
-            textEditorController.updateTitle(currentFile);
+            mainController.updateTitle(currentFile);
 
             JOptionPane.showMessageDialog(
                     gui,

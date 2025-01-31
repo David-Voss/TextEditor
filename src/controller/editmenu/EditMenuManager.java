@@ -1,7 +1,7 @@
 package controller.editmenu;
 
-import controller.TextEditorController;
-import gui.TextEditorGUI;
+import controller.TextEditorMainController;
+import gui.TextEditorMainGUI;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
@@ -22,14 +22,14 @@ import java.util.Locale;
 
 public class EditMenuManager {
 
-    private final TextEditorGUI gui;
-    private final TextEditorController textEditorController;
+    private final TextEditorMainGUI gui;
+    private final TextEditorMainController mainController;
     private final UndoManager undoManager = new UndoManager();
     private File currentFile = null;
 
-    public EditMenuManager(TextEditorGUI gui, TextEditorController textEditorController) {
+    public EditMenuManager(TextEditorMainGUI gui, TextEditorMainController mainController) {
         this.gui = gui;
-        this.textEditorController = textEditorController;
+        this.mainController = mainController;
 
         initialiseUndoManager();
         updateUndoRedoState();

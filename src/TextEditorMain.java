@@ -1,5 +1,5 @@
-import controller.TextEditorController;
-import gui.TextEditorGUI;
+import controller.TextEditorMainController;
+import gui.TextEditorMainGUI;
 
 public class TextEditorMain {
     public static void main(String[] args) {
@@ -9,8 +9,8 @@ public class TextEditorMain {
     public static class RunTextEditor {
 
         public RunTextEditor() {
-            TextEditorGUI gui = new TextEditorGUI("Texteditor | Unbenannt");
-            new TextEditorController(gui);
+            TextEditorMainGUI gui = new TextEditorMainGUI("Texteditor | Unbenannt");
+            new TextEditorMainController(gui);
         }
     }
 }

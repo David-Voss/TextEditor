@@ -1,6 +1,7 @@
 package controller;
 
 import controller.editmenu.EditMenuManager;
+import controller.editmenu.SearchAndReplaceManager;
 import controller.filemenu.FileMenuManager;
 import gui.TextEditorToolBar;
 
@@ -9,14 +10,12 @@ import java.awt.event.ActionListener;
 
 public class ToolBarManager implements ActionListener {
     private final TextEditorToolBar toolBar;
-    //private final TextEditorController textEditorController;
     private final FileMenuManager fileMenuManager;
     private final EditMenuManager editMenuManager;
     private final SearchAndReplaceManager searchAndReplaceManager;
 
     public ToolBarManager(TextEditorToolBar toolBar, FileMenuManager fileMenuManager, EditMenuManager editMenuManager, SearchAndReplaceManager searchAndReplaceManager) {
         this.toolBar = toolBar;
-        //this.textEditorController = textEditorController;
         this.fileMenuManager = fileMenuManager;
         this.editMenuManager = editMenuManager;
         this.searchAndReplaceManager = searchAndReplaceManager;
