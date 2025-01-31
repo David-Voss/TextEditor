@@ -5,6 +5,9 @@ import gui.TextEditorMainGUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -27,7 +30,75 @@ public class FileMenuManager {
         FileChooserConfigurator.configureFileChooser(fileChooser);
     }
 
-    //// 'File' menu methods / functions
+    public void createNewFile() {
+        if (!gui.getTextArea().getText().isEmpty()) {
+            Object[] options = {"Ja", "Nein"};
+            JOptionPane optionPane = new JOptionPane(
+                    "Ungespeicherte Änderungen gehen verloren. Fortfahren?",
+                    JOptionPane.WARNING_MESSAGE,
+                    JOptionPane.YES_NO_OPTION,
+                    null,
+                    options,
+                    options[1] // Standardmäßig "Nein" vorausgewählt
+            );
+
+            JDialog dialog = optionPane.createDialog(gui, "Neue Datei erstellen");
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            // Standardmäßig "Nein" als Default-Button setzen
+            SwingUtilities.invokeLater(() -> {
+                JButton noButton = getButton(dialog, "Nein");
+                if (noButton != null) {
+                    noButton.requestFocusInWindow();
+                    dialog.getRootPane().setDefaultButton(noButton);
+                }
+            });
+
+            // Enter-Handling: Bestätigt den aktuell fokussierten Button
+            dialog.getRootPane().registerKeyboardAction(
+                    e -> {
+                        JButton focusedButton = (dialog.getFocusOwner() instanceof JButton)
+                                ? (JButton) dialog.getFocusOwner()
+                                : getButton(dialog, "Nein"); // Falls kein Button fokussiert ist, "Nein" nehmen
+                        if (focusedButton != null) {
+                            focusedButton.doClick();
+                        }
+                    },
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW
+            );
+
+            dialog.setVisible(true);
+
+            // Ergebnis auswerten
+            Object selectedValue = optionPane.getValue();
+            if ("Ja".equals(selectedValue)) {
+                resetEditor();
+            }
+        } else {
+            resetEditor();
+        }
+    }
+
+    private void resetEditor() {
+        gui.getTextArea().setText("");
+        currentFile = null;
+        mainController.updateTitle(null);
+    }
+
+    // Hilfsmethode, um einen Button anhand seines Textes zu finden
+    private JButton getButton(JDialog dialog, String buttonText) {
+        for (Component comp : dialog.getContentPane().getComponents()) {
+            if (comp instanceof JPanel) {
+                for (Component btn : ((JPanel) comp).getComponents()) {
+                    if (btn instanceof JButton && ((JButton) btn).getText().equals(buttonText)) {
+                        return (JButton) btn;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     public void openFile() {
         fileChooser.setDialogTitle("Datei öffnen");
@@ -57,21 +128,6 @@ public class FileMenuManager {
                 );
             }
         }
-    }
-
-    public void createNewFile() {
-        if (!gui.getTextArea().getText().isEmpty()) {
-            int confirm = JOptionPane.showConfirmDialog(
-                    gui,
-                    "Ungespeicherte Änderungen gehen verloren. Fortfahren?",
-                    "Neue Datei erstellen",
-                    JOptionPane.YES_NO_OPTION
-            );
-            if (confirm != JOptionPane.YES_OPTION) return;
-        }
-        gui.getTextArea().setText("");
-        currentFile = null;
-        mainController.updateTitle(currentFile);
     }
 
     public void saveFile() {
