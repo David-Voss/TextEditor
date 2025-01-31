@@ -112,13 +112,6 @@ public class FileMenuManager {
                 String content = new String(java.nio.file.Files.readAllBytes(currentFile.toPath()));
                 gui.getTextArea().setText(content);
                 mainController.updateTitle(currentFile);
-
-                JOptionPane.showMessageDialog(
-                        gui,
-                        "Datei erfolgreich geöffnet: \n" + currentFile.getAbsolutePath(),
-                        "Datei geöffnet",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(
                         gui,
