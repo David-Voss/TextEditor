@@ -3,15 +3,24 @@ package controller.filemenu;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
+/**
+ * Configures a {@link JFileChooser} to enhance usability.
+ * Provides better keyboard navigation and ENTER key handling.
+ */
 public class FileChooserConfigurator {
 
+    /**
+     * Configures the given file chooser.
+     * Ensures that the ENTER key can be used to select a file or confirm a button press.
+     *
+     * @param fileChooser The {@link JFileChooser} to configure.
+     */
     public static void configureFileChooser(JFileChooser fileChooser) {
         fileChooser.setFocusable(true);
         fileChooser.requestFocusInWindow();
 
-        // ENTER-Taste: Datei auswählen ODER Button klicken
+        // Map ENTER key to either select a file or trigger a focused button
         fileChooser.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke("ENTER"), "confirmSelection");
 
@@ -20,13 +29,10 @@ public class FileChooserConfigurator {
             public void actionPerformed(ActionEvent e) {
                 Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 
-                // Prüfen, ob ein Button (Öffnen/Speichern) fokussiert ist
                 if (focusOwner instanceof JButton) {
-                    ((JButton) focusOwner).doClick();
-                }
-                // Prüfen, ob die Dateiliste den Fokus hat
-                else if (focusOwner instanceof JList) {
-                    fileChooser.approveSelection(); // Simuliert Klick auf "Öffnen"
+                    ((JButton) focusOwner).doClick(); // Simulates button click
+                } else if (focusOwner instanceof JList) {
+                    fileChooser.approveSelection(); // Confirms file selection
                 }
             }
         });

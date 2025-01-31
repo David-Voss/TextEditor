@@ -13,6 +13,11 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
+/**
+ * The main controller for the text editor.
+ * This class manages user interactions by handling menu actions, shortcuts,
+ * and toolbar functionalities.
+ */
 public class TextEditorMainController implements ActionListener {
 
     private final TextEditorMainGUI gui;
@@ -22,6 +27,12 @@ public class TextEditorMainController implements ActionListener {
     private final SearchAndReplaceManager searchAndReplaceManager;
     private final ToolBarManager toolBarManager;
 
+    /**
+     * Constructs the main controller for the text editor.
+     * It initialises menu managers, shortcut keys, and event listeners.
+     *
+     * @param gui The main graphical user interface of the text editor.
+     */
     public TextEditorMainController(TextEditorMainGUI gui) {
         this.gui = gui;
         this.fileMenuManager = new FileMenuManager(gui, this);
@@ -34,6 +45,9 @@ public class TextEditorMainController implements ActionListener {
         initialiseListeners();
     }
 
+    /**
+     * Sets up keyboard shortcuts for the application's menus.
+     */
     public void initialiseShortcuts() {
         // Shortcuts 'File' menu
         gui.getNewFileItem().setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
@@ -49,50 +63,47 @@ public class TextEditorMainController implements ActionListener {
         gui.getSearchItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
         gui.getSearchAndReplaceItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getDateTimeItem().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-
-        // Shortcuts Toolbar
-        //gui.getToolBar().getSearchField().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
     }
 
+    /**
+     * Registers action listeners for menu items and updates web search status.
+     */
     private void initialiseListeners() {
+        // Update web search item status dynamically
         gui.getTextArea().addCaretListener(e -> editMenuManager.updateWebSearchItemStatus());
 
-        // Listeners 'File' menu
-        gui.getNewFileItem().addActionListener(this);
-        gui.getNewFileItem().setActionCommand("new");
+        // Register listeners for 'File' menu actions
+        addMenuAction(gui.getNewFileItem(), "new");
+        addMenuAction(gui.getOpenFileItem(), "open");
+        addMenuAction(gui.getSaveFileItem(), "save");
+        addMenuAction(gui.getSaveFileAsItem(), "save_as");
+        addMenuAction(gui.getPrintDocumentItem(), "print");
 
-        gui.getOpenFileItem().addActionListener(this);
-        gui.getOpenFileItem().setActionCommand("open");
-
-        gui.getSaveFileItem().addActionListener(this);
-        gui.getSaveFileItem().setActionCommand("save");
-
-        gui.getSaveFileAsItem().addActionListener(this);
-        gui.getSaveFileAsItem().setActionCommand("save_as");
-
-        gui.getPrintDocumentItem().addActionListener(this);
-        gui.getPrintDocumentItem().setActionCommand("print");
-
-        // Listeners 'Edit' menu
-        gui.getUndoItem().addActionListener(this);
-        gui.getUndoItem().setActionCommand("undo");
-
-        gui.getRedoItem().addActionListener(this);
-        gui.getRedoItem().setActionCommand("redo");
-
-        gui.getWebSearchItem().addActionListener(this);
-        gui.getWebSearchItem().setActionCommand("web_search");
-
-        gui.getSearchItem().addActionListener(this);
-        gui.getSearchItem().setActionCommand("simple_search");
-
-        gui.getSearchAndReplaceItem().addActionListener(this);
-        gui.getSearchAndReplaceItem().setActionCommand("search_and_replace_dialog");
-
-        gui.getDateTimeItem().addActionListener(this);
-        gui.getDateTimeItem().setActionCommand("date/time");
+        // Register listeners for 'Edit' menu actions
+        addMenuAction(gui.getUndoItem(), "undo");
+        addMenuAction(gui.getRedoItem(), "redo");
+        addMenuAction(gui.getWebSearchItem(), "web_search");
+        addMenuAction(gui.getSearchItem(), "simple_search");
+        addMenuAction(gui.getSearchAndReplaceItem(), "search_and_replace_dialog");
+        addMenuAction(gui.getDateTimeItem(), "date/time");
     }
 
+    /**
+     * Adds an action listener to a menu item with a specific action command.
+     *
+     * @param menuItem The menu item to which the listener is added.
+     * @param command  The action command for event handling.
+     */
+    private void addMenuAction(JMenuItem menuItem, String command) {
+        menuItem.addActionListener(this);
+        menuItem.setActionCommand(command);
+    }
+
+    /**
+     * Handles menu and toolbar actions triggered by the user.
+     *
+     * @param e The action event triggered by user interaction.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
@@ -139,6 +150,11 @@ public class TextEditorMainController implements ActionListener {
         }
     }
 
+    /**
+     * Updates the title of the editor window based on the current file.
+     *
+     * @param currentFile The currently opened or saved file.
+     */
     public void updateTitle(File currentFile) {
         if (currentFile != null) {
             gui.setTitle("Texteditor | " + currentFile.getName());
