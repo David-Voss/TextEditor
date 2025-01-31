@@ -66,4 +66,9 @@ public class TextEditorStatusBar extends JPanel {
         wordCountLabel.setText(wordLabel);
         charCountLabel.setText(charCount + " Zeichen");
     }
+
+    // Status bar getter
+    public JLabel getCursorPositionLabel() { return cursorPositionLabel; }
+    public JLabel getCharCountLabel() { return charCountLabel; }
+    public JLabel getWordCountLabel() { return wordCountLabel; }
 }

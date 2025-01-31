@@ -54,16 +54,16 @@ public class StatusBarManager {
      */
     private class TextUpdater implements DocumentListener {
         @Override
-        public void insertUpdate(DocumentEvent e) { updateTextInfo(); }
+        public void insertUpdate(DocumentEvent e) { infoUpdater(); }
         @Override
-        public void removeUpdate(DocumentEvent e) { updateTextInfo(); }
+        public void removeUpdate(DocumentEvent e) { infoUpdater(); }
         @Override
-        public void changedUpdate(DocumentEvent e) { updateTextInfo(); }
+        public void changedUpdate(DocumentEvent e) { infoUpdater(); }
 
         /**
          * Updates the text statistics displayed in the status bar.
          */
-        private void updateTextInfo() {
+        private void infoUpdater() {
             String text = textArea.getText();
             statusBar.updateTextInfo(text.length(), countWords(text));
         }
@@ -77,5 +77,31 @@ public class StatusBarManager {
      */
     private int countWords(String text) {
         return text.trim().isEmpty() ? 0 : text.trim().split("\\s+").length;
+    }
+
+    /**
+     *
+     * @param line
+     * @param column
+     */
+
+    /**
+     * Updates the cursor position in the status bar.
+     *
+     * @param line   The current line number of the cursor (1-based index).
+     * @param column The current column number of the cursor (1-based index).
+     */
+    public void updateCursorPosition(int line, int column) {
+        statusBar.updateCursorPosition(line, column);
+    }
+
+    /**
+     * Updates the text information displayed in the status bar.
+     *
+     * @param charCount The total number of characters in the text.
+     * @param wordCount The total number of words in the text.
+     */
+    public void updateTextInfo(int charCount, int wordCount) {
+        statusBar.updateTextInfo(charCount, wordCount);
     }
 }
