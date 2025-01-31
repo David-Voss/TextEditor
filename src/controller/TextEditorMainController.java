@@ -46,6 +46,7 @@ public class TextEditorMainController implements ActionListener {
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         gui.getRedoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getWebSearchItem().setAccelerator(KeyStroke.getKeyStroke('G', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        gui.getSearchItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
         gui.getSearchAndReplaceItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getDateTimeItem().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 
@@ -81,6 +82,9 @@ public class TextEditorMainController implements ActionListener {
 
         gui.getWebSearchItem().addActionListener(this);
         gui.getWebSearchItem().setActionCommand("web_search");
+
+        gui.getSearchItem().addActionListener(this);
+        gui.getSearchItem().setActionCommand("simple_search");
 
         gui.getSearchAndReplaceItem().addActionListener(this);
         gui.getSearchAndReplaceItem().setActionCommand("search_and_replace_dialog");
@@ -123,7 +127,10 @@ public class TextEditorMainController implements ActionListener {
             case "search_and_replace_dialog":
                 searchAndReplaceDialogWindow.showSearchAndReplaceDialog(gui);
                 break;
-            // search() / replace() -> SearchAndReplaceManager
+            case "simple_search":
+                gui.getToolBar().getSearchField().requestFocus();
+                break;
+            // search()/replace() -> SearchAndReplaceManager
             case "date/time":
                 editMenuManager.dateTime();
                 break;

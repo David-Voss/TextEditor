@@ -92,6 +92,24 @@ public class SearchAndReplaceManager implements ActionListener {
             }
         });
 
+        dialogWindow.getSearchButton().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    dialogWindow.getReplaceButton().requestFocus(); // ↓ springt zu "Ersetzen"
+                }
+            }
+        });
+
+        dialogWindow.getReplaceButton().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    dialogWindow.getSearchButton().requestFocus(); // ↑ springt zurück zu "Suchen"
+                }
+            }
+        });
+
         dialogWindow.setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 
         dialogWindow.getSearchButton().addActionListener(this); // <- Listeners in die richtigen Klassen verschieben!

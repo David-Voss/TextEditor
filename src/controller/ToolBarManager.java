@@ -5,8 +5,8 @@ import controller.editmenu.SearchAndReplaceManager;
 import controller.filemenu.FileMenuManager;
 import gui.TextEditorToolBar;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.event.*;
 
 public class ToolBarManager implements ActionListener {
     private final TextEditorToolBar toolBar;
