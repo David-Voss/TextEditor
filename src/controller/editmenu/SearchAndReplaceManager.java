@@ -6,10 +6,7 @@ import gui.TextEditorMainGUI;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class SearchAndReplaceManager implements ActionListener {
 
@@ -37,6 +34,34 @@ public class SearchAndReplaceManager implements ActionListener {
                 resetHasSearchFunctionBeenCalled();
             }
         });
+
+        dialogWindow.getReplaceField().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    replace(
+                            dialogWindow.getSearchField().getText(),
+                            dialogWindow.getReplaceField().getText(),
+                            dialogWindow.getCaseSensitiveCheck().isSelected()
+                    );
+                }
+            }
+        });
+
+        dialogWindow.getSearchField().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    replace(
+                            dialogWindow.getSearchField().getText(),
+                            dialogWindow.getReplaceField().getText(),
+                            dialogWindow.getCaseSensitiveCheck().isSelected()
+                    );
+                }
+            }
+        });
+
+        dialogWindow.setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 
         dialogWindow.getSearchButton().addActionListener(this); // <- Listeners in die richtigen Klassen verschieben!
         dialogWindow.getSearchButton().setActionCommand("search");
@@ -117,7 +142,7 @@ public class SearchAndReplaceManager implements ActionListener {
         return lastMatchIndex;
     }
 
-    protected void replace(String searchTerm, String replaceTerm, boolean isCaseSensitive) {
+    public void replace(String searchTerm, String replaceTerm, boolean isCaseSensitive) {
         if (searchTerm == null || searchTerm.isEmpty()) {
             JOptionPane.showMessageDialog(
                     gui,

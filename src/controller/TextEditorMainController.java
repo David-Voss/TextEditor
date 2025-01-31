@@ -45,9 +45,12 @@ public class TextEditorMainController implements ActionListener {
         // Shortcuts 'Edit' menu
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         gui.getRedoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-        gui.getWebSearchItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-        gui.getSearchAndReplaceItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
+        gui.getWebSearchItem().setAccelerator(KeyStroke.getKeyStroke('G', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        gui.getSearchAndReplaceItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getDateTimeItem().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+
+        // Shortcuts Toolbar
+        //gui.getToolBar().getSearchField().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
     }
 
     private void initialiseListeners() {
