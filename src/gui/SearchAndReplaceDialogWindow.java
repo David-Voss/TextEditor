@@ -1,7 +1,5 @@
 package gui;
 
-import controller.SearchAndReplaceManager;
-
 import javax.swing.*;
 import java.awt.*;
 

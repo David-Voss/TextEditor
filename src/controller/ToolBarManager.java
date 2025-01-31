@@ -1,5 +1,7 @@
 package controller;
 
+import controller.editmenu.EditMenuManager;
+import controller.filemenu.FileMenuManager;
 import gui.TextEditorToolBar;
 
 import java.awt.event.ActionEvent;
@@ -7,12 +9,16 @@ import java.awt.event.ActionListener;
 
 public class ToolBarManager implements ActionListener {
     private final TextEditorToolBar toolBar;
-    private final TextEditorController textEditorController;
+    //private final TextEditorController textEditorController;
+    private final FileMenuManager fileMenuManager;
+    private final EditMenuManager editMenuManager;
     private final SearchAndReplaceManager searchAndReplaceManager;
 
-    public ToolBarManager(TextEditorToolBar toolBar, TextEditorController textEditorController, SearchAndReplaceManager searchAndReplaceManager) {
+    public ToolBarManager(TextEditorToolBar toolBar, FileMenuManager fileMenuManager, EditMenuManager editMenuManager, SearchAndReplaceManager searchAndReplaceManager) {
         this.toolBar = toolBar;
-        this.textEditorController = textEditorController;
+        //this.textEditorController = textEditorController;
+        this.fileMenuManager = fileMenuManager;
+        this.editMenuManager = editMenuManager;
         this.searchAndReplaceManager = searchAndReplaceManager;
         initialiseToolBarListeners();
     }
@@ -49,25 +55,25 @@ public class ToolBarManager implements ActionListener {
 
         switch (actionCommand) {
             case "new":
-                textEditorController.createNewFile();
+                fileMenuManager.createNewFile();
                 break;
             case "open":
-                textEditorController.openFile();
+                fileMenuManager.openFile();
                 break;
             case "save":
-                textEditorController.saveFile();
+                fileMenuManager.saveFile();
                 break;
             case "print":
-                textEditorController.printDocument();
+                fileMenuManager.printDocument();
                 break;
             case "undo":
-                textEditorController.undo();
+                editMenuManager.undo();
                 break;
             case "redo":
-                textEditorController.redo();
+                editMenuManager.redo();
                 break;
             case "web_search":
-                textEditorController.webSearch();
+                editMenuManager.webSearch();
                 break;
             case "search_field":
                 searchAndReplaceManager.search(toolBar.getSearchField().getText(), false);

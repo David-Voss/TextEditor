@@ -1,4 +1,3 @@
-
 import controller.TextEditorController;
 import gui.TextEditorGUI;
 
