@@ -17,17 +17,19 @@ public class FileMenuManager {
 
     private final TextEditorMainGUI gui;
     private final TextEditorMainController mainController;
+    private JFileChooser fileChooser;
     private File currentFile = null;
 
     public FileMenuManager(TextEditorMainGUI gui, TextEditorMainController mainController) {
         this.gui = gui;
         this.mainController = mainController;
+        fileChooser = new JFileChooser();
+        FileChooserConfigurator.configureFileChooser(fileChooser);
     }
 
     //// 'File' menu methods / functions
 
     public void openFile() {
-        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Datei öffnen");
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Textdateien (*.txt)", "txt"));
 
@@ -81,7 +83,6 @@ public class FileMenuManager {
     }
 
     public void saveFileAs() {
-        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Speichern unter");
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Textdateien (*.txt)", "txt"));
 
