@@ -29,11 +29,15 @@ public class SearchAndReplaceManager implements ActionListener {
         dialogWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                clearHighlights();
-                resetMatchIndex();
-                resetHasSearchFunctionBeenCalled();
+                closeSearchDialog();
             }
         });
+
+        dialogWindow.getRootPane().registerKeyboardAction(
+                e -> closeSearchDialog(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW
+        );
 
         dialogWindow.getReplaceField().addKeyListener(new KeyAdapter() {
             @Override
@@ -61,6 +65,33 @@ public class SearchAndReplaceManager implements ActionListener {
             }
         });
 
+        dialogWindow.getSearchButton().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    dialogWindow.getSearchButton().doClick();
+                }
+            }
+        });
+
+        dialogWindow.getReplaceButton().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    dialogWindow.getReplaceButton().doClick();
+                }
+            }
+        });
+
+        dialogWindow.getCaseSensitiveCheck().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    dialogWindow.getCaseSensitiveCheck().setSelected(!dialogWindow.getCaseSensitiveCheck().isSelected());
+                }
+            }
+        });
+
         dialogWindow.setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 
         dialogWindow.getSearchButton().addActionListener(this); // <- Listeners in die richtigen Klassen verschieben!
@@ -72,9 +103,9 @@ public class SearchAndReplaceManager implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+        String actionCommand = e.getActionCommand();
 
-        switch (command) {
+        switch (actionCommand) {
             case "search":
                 search(dialogWindow.getSearchField().getText(), dialogWindow.getCaseSensitiveCheck().isSelected());
                 break;
@@ -86,8 +117,15 @@ public class SearchAndReplaceManager implements ActionListener {
                 );
                 break;
             default:
-                System.out.println("Unbekannte Aktion: " + command);
+                System.out.println("Unbekannte Aktion: " + actionCommand);
         }
+    }
+
+    private void closeSearchDialog() {
+        clearHighlights();
+        resetMatchIndex();
+        resetHasSearchFunctionBeenCalled();
+        dialogWindow.dispose();
     }
 
     public int search(String searchTerm, boolean isCaseSensitive) {
