@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * </p>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Ensures tests run in order
-class StatusBarManagerTests {
+class StatusBarManagerTest {
 
     private StatusBarManager statusBarManager;
     private TextEditorMainGUI gui;
