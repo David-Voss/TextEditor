@@ -8,10 +8,12 @@ import java.awt.event.ActionListener;
 public class ToolBarManager implements ActionListener {
     private final TextEditorToolBar toolBar;
     private final TextEditorController textEditorController;
+    private final SearchAndReplaceManager searchAndReplaceManager;
 
-    public ToolBarManager(TextEditorToolBar toolBar, TextEditorController textEditorController) {
+    public ToolBarManager(TextEditorToolBar toolBar, TextEditorController textEditorController, SearchAndReplaceManager searchAndReplaceManager) {
         this.toolBar = toolBar;
         this.textEditorController = textEditorController;
+        this.searchAndReplaceManager = searchAndReplaceManager;
         initialiseToolBarListeners();
     }
 
@@ -68,7 +70,7 @@ public class ToolBarManager implements ActionListener {
                 textEditorController.webSearch();
                 break;
             case "search_field":
-                textEditorController.search(toolBar.getSearchField().getText(), false);
+                searchAndReplaceManager.search(toolBar.getSearchField().getText(), false);
                 break;
         }
     }

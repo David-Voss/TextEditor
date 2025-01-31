@@ -20,7 +20,7 @@ public class TextEditorGUI extends JFrame {
     JMenuItem undoItem;
     JMenuItem redoItem;
     JMenuItem webSearchItem;
-    JMenuItem searchWordItem;
+    JMenuItem searchAndReplaceItem;
     JMenuItem dateTimeItem;
 
     private final TextEditorToolBar toolBar;
@@ -78,8 +78,8 @@ public class TextEditorGUI extends JFrame {
 
         editMenu.addSeparator();
 
-        this.searchWordItem = new JMenuItem("Suchen");
-        editMenu.add(searchWordItem);
+        this.searchAndReplaceItem = new JMenuItem("Suchen/Ersetzen");
+        editMenu.add(searchAndReplaceItem);
 
         editMenu.addSeparator();
 
@@ -117,7 +117,7 @@ public class TextEditorGUI extends JFrame {
     public JMenuItem getUndoItem() { return undoItem; }
     public JMenuItem getRedoItem() {  return redoItem; }
     public JMenuItem getWebSearchItem() { return webSearchItem; }
-    public JMenuItem getSearchWordItem() { return searchWordItem; }
+    public JMenuItem getSearchAndReplaceItem() { return searchAndReplaceItem; }
     public JMenuItem getDateTimeItem() { return dateTimeItem; }
 
     public TextEditorToolBar getToolBar() { return toolBar; }

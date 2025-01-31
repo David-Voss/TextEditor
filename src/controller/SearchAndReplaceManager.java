@@ -1,17 +1,68 @@
 package controller;
 
+import gui.SearchAndReplaceDialogWindow;
+import gui.TextEditorGUI;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class SearchAndReplaceManager {
+public class SearchAndReplaceManager implements ActionListener {
 
+    private final TextEditorGUI gui;
     private final JTextArea textArea;
+    private final SearchAndReplaceDialogWindow dialogWindow;
     private int lastMatchIndex = -1;
     private boolean hasSearchFunctionBeenCalled = false;
 
-    public SearchAndReplaceManager(JTextArea textArea) {
-        this.textArea = textArea;
+    public SearchAndReplaceManager(TextEditorGUI gui, SearchAndReplaceDialogWindow dialogWindow) {
+        this. gui = gui;
+        this.textArea = gui.getTextArea();
+        this.dialogWindow = dialogWindow;
+
+        initialiseSearchAndReplaceListeners();
+    }
+
+    private void initialiseSearchAndReplaceListeners() {
+        // Window listeners
+        dialogWindow.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                clearHighlights();
+                resetMatchIndex();
+                resetHasSearchFunctionBeenCalled();
+            }
+        });
+
+        dialogWindow.getSearchButton().addActionListener(this); // <- Listeners in die richtigen Klassen verschieben!
+        dialogWindow.getSearchButton().setActionCommand("search");
+
+        dialogWindow.getReplaceButton().addActionListener(this);
+        dialogWindow.getReplaceButton().setActionCommand("replace");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        switch (command) {
+            case "search":
+                search(dialogWindow.getSearchField().getText(), dialogWindow.getCaseSensitiveCheck().isSelected());
+                break;
+            case "replace":
+                replace(
+                        dialogWindow.getSearchField().getText(),
+                        dialogWindow.getReplaceField().getText(),
+                        dialogWindow.getCaseSensitiveCheck().isSelected()
+                );
+                break;
+            default:
+                System.out.println("Unbekannte Aktion: " + command);
+        }
     }
 
     public int search(String searchTerm, boolean isCaseSensitive) {
@@ -19,8 +70,8 @@ public class SearchAndReplaceManager {
 
         if (searchTerm == null || searchTerm.isEmpty()) {
             JOptionPane.showMessageDialog(
-                    null,
-                    "Kein Suchbegriff eingegeben.",
+                    gui,
+                    "Kein Suchbegriff eingegeben",
                     "Leeres Suchfeld",
                     JOptionPane.WARNING_MESSAGE
             );
@@ -43,15 +94,15 @@ public class SearchAndReplaceManager {
             lastMatchIndex = textContent.indexOf(searchTerm);
             if (lastMatchIndex != -1) {
                 JOptionPane.showMessageDialog(
-                        null,
-                        "Am Ende des Dokuments angekommen. Suche beginnt von vorne.",
+                        gui,
+                        "Am Ende des Dokuments angekommen. Suche beginnt von vorne",
                         "Suchen",
                         JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
                 JOptionPane.showMessageDialog(
-                        null,
-                        "Keine Treffer.",
+                        gui,
+                        "Keine Treffer",
                         "Suchen",
                         JOptionPane.INFORMATION_MESSAGE
                 );
@@ -66,9 +117,14 @@ public class SearchAndReplaceManager {
         return lastMatchIndex;
     }
 
-    public void replace(String searchTerm, String replaceTerm, boolean isCaseSensitive) {
+    protected void replace(String searchTerm, String replaceTerm, boolean isCaseSensitive) {
         if (searchTerm == null || searchTerm.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Kein Suchbegriff eingegeben.", "Leeres Suchfeld", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "Kein Suchbegriff eingegeben",
+                    "Leeres Suchfeld",
+                    JOptionPane.WARNING_MESSAGE
+            );
             return;
         }
 
@@ -85,15 +141,11 @@ public class SearchAndReplaceManager {
         // Check whether the selected word matches searchTerm
         if ((isCaseSensitive && selectedText.equals(searchTerm)) || (!isCaseSensitive && selectedText.equalsIgnoreCase(searchTerm))) {
             textArea.replaceRange(replaceTerm, lastMatchIndex, lastMatchIndex + searchTerm.length());
-
-            // Place the cursor behind the replaced word
-            //textArea.setCaretPosition(lastMatchIndex + replaceTerm.length());
         }
 
         // Search for the next match
         lastMatchIndex = search(searchTerm, isCaseSensitive);
     }
-
 
     private void highlightText(int start, int end) {
         try {

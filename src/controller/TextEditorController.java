@@ -40,9 +40,9 @@ public class TextEditorController implements ActionListener {
 
     public TextEditorController(TextEditorGUI gui) {
         this.gui = gui;
-        this.searchAndReplaceManager = new SearchAndReplaceManager(gui.getTextArea());
-        this.searchAndReplaceDialogWindow = new SearchAndReplaceDialogWindow(gui, searchAndReplaceManager);
-        this.toolBarManager = new ToolBarManager(gui.getToolBar(), this);
+        this.searchAndReplaceDialogWindow = new SearchAndReplaceDialogWindow(gui);
+        this.searchAndReplaceManager = new SearchAndReplaceManager(gui, searchAndReplaceDialogWindow);
+        this.toolBarManager = new ToolBarManager(gui.getToolBar(), this, searchAndReplaceManager);
 
         //this.statusBarManager = new StatusBarManager(gui.getStatusBar(), gui.getTextArea());
         initialiseShortcuts();
@@ -63,7 +63,7 @@ public class TextEditorController implements ActionListener {
         gui.getUndoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         gui.getRedoItem().setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
         gui.getWebSearchItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-        gui.getSearchWordItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
+        gui.getSearchAndReplaceItem().setAccelerator(KeyStroke.getKeyStroke('F', InputEvent.CTRL_DOWN_MASK));
         gui.getDateTimeItem().setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
     }
 
@@ -96,14 +96,8 @@ public class TextEditorController implements ActionListener {
         gui.getWebSearchItem().addActionListener(this);
         gui.getWebSearchItem().setActionCommand("web_search");
 
-        gui.getSearchWordItem().addActionListener(this);
-        gui.getSearchWordItem().setActionCommand("search_dialog");
-
-        searchAndReplaceDialogWindow.getSearchButton().addActionListener(this);
-        searchAndReplaceDialogWindow.getSearchButton().setActionCommand("search");
-
-        searchAndReplaceDialogWindow.getReplaceButton().addActionListener(this);
-        searchAndReplaceDialogWindow.getReplaceButton().setActionCommand("replace");
+        gui.getSearchAndReplaceItem().addActionListener(this);
+        gui.getSearchAndReplaceItem().setActionCommand("search_and_replace_dialog");
 
         gui.getDateTimeItem().addActionListener(this);
         gui.getDateTimeItem().setActionCommand("date/time");
@@ -140,15 +134,10 @@ public class TextEditorController implements ActionListener {
             case "web_search":
                 webSearch();
                 break;
-            case "search_dialog":
+            case "search_and_replace_dialog":
                 searchAndReplaceDialogWindow.showSearchAndReplaceDialog(gui);
                 break;
-            case "search":
-                search();
-                break;
-            case "replace":
-                replace();
-                break;
+            // search() / replace() -> SearchAndReplaceManager
             case "date/time":
                 dateTime();
                 break;
@@ -368,29 +357,9 @@ public class TextEditorController implements ActionListener {
         gui.getWebSearchItem().setEnabled(hasSelection);
     }
 
-    protected void search() {
-        String searchTerm = searchAndReplaceDialogWindow.getSearchField().getText();
-        boolean isCaseSensitive = searchAndReplaceDialogWindow.getCaseSensitiveCheck().isSelected();
-
-        searchAndReplaceManager.search(searchTerm, isCaseSensitive);
-    }
-
-    protected void search(String searchTerm, boolean isCaseSensitive) {
-        searchAndReplaceManager.search(searchTerm, isCaseSensitive);
-    }
-
-    private void replace() {
-        String searchTerm = searchAndReplaceDialogWindow.getSearchField().getText();
-        String replaceTerm = searchAndReplaceDialogWindow.getReplaceField().getText();
-        boolean isCaseSensitive = searchAndReplaceDialogWindow.getCaseSensitiveCheck().isSelected();
-
-        searchAndReplaceManager.replace(searchTerm, replaceTerm, isCaseSensitive);
-    }
-
     private void dateTime() {
         JTextArea textArea = gui.getTextArea();
         int cursorPosition = textArea.getCaretPosition();
-
 
         // Get system locale and timezone
         Locale systemLocale = Locale.getDefault();
@@ -415,5 +384,4 @@ public class TextEditorController implements ActionListener {
             );
         }
     }
-
 }

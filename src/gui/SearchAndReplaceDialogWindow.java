@@ -15,7 +15,7 @@ public class SearchAndReplaceDialogWindow extends JDialog {
     JButton searchButton;
     JButton replaceButton;
 
-    public SearchAndReplaceDialogWindow(JFrame parent, SearchAndReplaceManager searchAndReplaceManager) {
+    public SearchAndReplaceDialogWindow(JFrame parent) {
         super(parent, "Suchen und Ersetzen", false);
 
         setLayout(new BorderLayout());
@@ -52,16 +52,6 @@ public class SearchAndReplaceDialogWindow extends JDialog {
         buttonPanel.add(replaceButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
-
-        // WindowListener - Removes highlights when closing the window
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                searchAndReplaceManager.clearHighlights();
-                searchAndReplaceManager.resetMatchIndex();
-                searchAndReplaceManager.resetHasSearchFunctionBeenCalled();
-            }
-        });
     }
 
     public void showSearchAndReplaceDialog(JFrame parent) {
