@@ -12,12 +12,12 @@
 
 ## Preview of the application:
 *_The main window with all its components_*
-![screenshot_MainWindow.png](assets/screenshots/screenshot_MainWindow.png)
+<br>![screenshot_MainWindow.png](assets/screenshots/screenshot_MainWindow.png)
 <br><br>
 
 ### Menu Bar
 #### File Menu
-![screenshot_fileMenu.png](assets/screenshots/screenshot_fileMenu.png)
+<br>![screenshot_fileMenu.png](assets/screenshots/screenshot_fileMenu.png)
 <br><br>
 Consisting of the following menu items:
 - New File
@@ -40,7 +40,7 @@ Consisting of the following menu items:
 - Date / Time -> inserts the current date (DD.MM.YYYY) and time (HH:MM, 24h) into the text area
 
 *_Search And Replace Dialog:_*
-![screenshot_searchAndReplaceDialog.png](assets/screenshots/screenshot_searchAndReplaceDialog.png)
+<br>![screenshot_searchAndReplaceDialog.png](assets/screenshots/screenshot_searchAndReplaceDialog.png)
 <br><br>
 
 #### Toolbar
@@ -55,10 +55,10 @@ Consisting of buttons and a text field for following components:
 - Search -> not case-sensitive
 
 *_Search function:_*
-![screenshot_simpleSearch.png](assets/screenshots/screenshot_simpleSearch.png)
+<br>![screenshot_simpleSearch.png](assets/screenshots/screenshot_simpleSearch.png)
 
 *_Web Search function:_*
-![screenshot_webSearch.png](assets/screenshots/screenshot_webSearch.png)
+<br>![screenshot_webSearch.png](assets/screenshots/screenshot_webSearch.png)
 <br><br>
 
 #### Text Area
