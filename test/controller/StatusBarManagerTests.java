@@ -5,7 +5,6 @@ import gui.TextEditorStatusBar;
 import org.junit.jupiter.api.*;
 
 import javax.swing.*;
-import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

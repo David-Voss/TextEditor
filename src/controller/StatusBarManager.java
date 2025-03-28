@@ -80,12 +80,6 @@ public class StatusBarManager {
     }
 
     /**
-     *
-     * @param line
-     * @param column
-     */
-
-    /**
      * Updates the cursor position in the status bar.
      *
      * @param line   The current line number of the cursor (1-based index).
