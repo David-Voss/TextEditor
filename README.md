@@ -64,13 +64,14 @@ Consisting of buttons and a text field for following components:
 #### Text Area
 - The text area consists of only a simple JTextArea with automatic text wrapping.
 
-<br><br>
+<br>
+
 #### Status Bar
 Provides the following information:
 - The current line and column coordinates of the cursor
 - The total of characters written
 - The total of words written
-
+<br><br>
 
 ## Brief description
 TextEditor is a Java Swing-based desktop application that enables users to create, open, edit, and save plain text documents. 
